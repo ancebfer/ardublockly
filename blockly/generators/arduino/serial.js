@@ -57,3 +57,28 @@ Blockly.Arduino['serial_setup'] = function(block) {
   var code = '';
   return code;
 };
+
+/**
+ * Code generator for block for getting the number of bytes (characters) available from the serial com.
+ * Arduino code: loop { Serial.available(); }
+ * @param {!Blockly.Block} block Block to generate the code from.
+ * @return {array} Completed code.
+ */
+Blockly.Arduino['serial_available'] = function(block) {
+  var serialId = block.getFieldValue('SERIAL_ID');
+  var code = serialId + '.available()';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
+/**
+ * Code generator for block for reading from the serial com.
+ * Arduino code: loop { Serial.read(); }
+ * @param {!Blockly.Block} block Block to generate the code from.
+ * @return {array} Completed code.
+ */
+Blockly.Arduino['serial_read'] = function(block) {
+  var serialId = block.getFieldValue('SERIAL_ID');
+  var code = serialId + '.read()';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+

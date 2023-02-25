@@ -114,9 +114,9 @@ Blockly.Blocks['serial_print'] = {
 
     if (!setupInstancePresent) {
       this.setWarningText(Blockly.Msg.ARD_SERIAL_PRINT_WARN.replace('%1',
-          thisInstanceName), 'serial_setup');
+          thisInstanceName), 'serial_print_setup');
     } else {
-      this.setWarningText(null, 'serial_setup');
+      this.setWarningText(null, 'serial_print_setup');
     }
   },
   /**
@@ -126,5 +126,132 @@ Blockly.Blocks['serial_print'] = {
   updateFields: function() {
     Blockly.Arduino.Boards.refreshBlockFieldDropdown(
         this, 'SERIAL_ID', 'serial');
+  }
+};
+
+Blockly.Blocks['serial_available'] = {
+  /**
+   * Block for getting the number of bytes (characters) available from the serial com.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setHelpUrl('http://www.arduino.cc/en/Serial/Available');
+    this.setColour(Blockly.Blocks.serial.HUE);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown(
+                Blockly.Arduino.Boards.selected.serial), 'SERIAL_ID')
+        .appendField(Blockly.Msg.ARD_SERIAL_AVAILABLE);
+    this.setOutput(true, Blockly.Types.NUMBER.output);
+    this.setTooltip(Blockly.Msg.ARD_SERIAL_AVAILABLE_TIP);
+  },
+  /**
+   * Called whenever anything on the workspace changes.
+   * It checks the instances of serial_setup and attaches a warning to this
+   * block if not valid data is found.
+   * @this Blockly.Block
+   */
+  onchange: function(event) {
+    if (!this.workspace || event.type == Blockly.Events.MOVE ||
+        event.type == Blockly.Events.UI) {
+        return;  // Block deleted or irrelevant event
+    }
+
+    // Get the Serial instance from this block
+    var thisInstanceName = this.getFieldValue('SERIAL_ID');
+    // Iterate through top level blocks to find setup instance for the serial id
+    var blocks = Blockly.mainWorkspace.getTopBlocks();
+    var setupInstancePresent = false;
+    for (var x = 0; x < blocks.length; x++) {
+      var func = blocks[x].getSerialSetupInstance;
+      if (func) {
+        var setupBlockInstanceName = func.call(blocks[x]);
+        if (thisInstanceName == setupBlockInstanceName) {
+          setupInstancePresent = true;
+          break;
+        }
+      }
+    }
+
+    if (!setupInstancePresent) {
+      this.setWarningText(Blockly.Msg.ARD_SERIAL_READ_WARN.replace('%1',
+          thisInstanceName), 'serial_available_setup');
+    } else {
+      this.setWarningText(null, 'serial_available_setup');
+    }
+  },
+  /**
+   * Updates the content of the the serial related fields.
+   * @this Blockly.Block
+   */
+  updateFields: function() {
+    Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+        this, 'SERIAL_ID', 'serial');
+  },
+  /** @return {string} The type of return value for the block, an integer. */
+  getBlockType: function() {
+    return Blockly.Types.NUMBER;
+  }
+};
+Blockly.Blocks['serial_read'] = {
+  /**
+   * Block for reading from the serial com.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setHelpUrl('http://www.arduino.cc/en/Serial/Read');
+    this.setColour(Blockly.Blocks.serial.HUE);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown(
+                Blockly.Arduino.Boards.selected.serial), 'SERIAL_ID')
+        .appendField(Blockly.Msg.ARD_SERIAL_READ);
+    this.setOutput(true, Blockly.Types.NUMBER.output);
+    this.setTooltip(Blockly.Msg.ARD_SERIAL_READ_TIP);
+  },
+  /**
+   * Called whenever anything on the workspace changes.
+   * It checks the instances of serial_setup and attaches a warning to this
+   * block if not valid data is found.
+   * @this Blockly.Block
+   */
+  onchange: function(event) {
+    if (!this.workspace || event.type == Blockly.Events.MOVE ||
+        event.type == Blockly.Events.UI) {
+        return;  // Block deleted or irrelevant event
+    }
+
+    // Get the Serial instance from this block
+    var thisInstanceName = this.getFieldValue('SERIAL_ID');
+    // Iterate through top level blocks to find setup instance for the serial id
+    var blocks = Blockly.mainWorkspace.getTopBlocks();
+    var setupInstancePresent = false;
+    for (var x = 0; x < blocks.length; x++) {
+      var func = blocks[x].getSerialSetupInstance;
+      if (func) {
+        var setupBlockInstanceName = func.call(blocks[x]);
+        if (thisInstanceName == setupBlockInstanceName) {
+          setupInstancePresent = true;
+          break;
+        }
+      }
+    }
+
+    if (!setupInstancePresent) {
+      this.setWarningText(Blockly.Msg.ARD_SERIAL_READ_WARN.replace('%1',
+          thisInstanceName), 'serial_read_setup');
+    } else {
+      this.setWarningText(null, 'serial_read_setup');
+    }
+  },
+  /**
+   * Updates the content of the the serial related fields.
+   * @this Blockly.Block
+   */
+  updateFields: function() {
+    Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+        this, 'SERIAL_ID', 'serial');
+  },
+  /** @return {string} The type of return value for the block, an integer. */
+  getBlockType: function() {
+    return Blockly.Types.NUMBER;
   }
 };
